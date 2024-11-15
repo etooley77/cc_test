@@ -51,6 +51,15 @@ h6 {
 		0 0 0 rgb(0, 0, 255);
 }
 
+.page-container .bar .links .hidden-link {
+	opacity: 0;
+	cursor: pointer;
+}
+
+.page-container .bar .links .visible-link {
+	opacity: 1;
+}
+
 .page-container .bar .links a:hover {
 	text-shadow:
 		0.3px -0.1px 0.1px rgb(255, 0, 0),
