@@ -16,6 +16,11 @@ h6 {
 	margin: 0;
 }
 
+.page-container {
+	display: flex;
+	flex-direction: row;
+}
+
 /* Bar */
 
 .bar {
@@ -29,20 +34,20 @@ h6 {
 	justify-content: center;
 }
 
-.page-container .bar .barinfo {
+.bar .barinfo {
 	display: flex;
 	align-items: center;
 	gap: 25px;
 	margin-right: 200px;
 }
 
-.page-container .bar .links {
+.bar .links {
 	display: flex;
 	gap: 25px;
 	align-items: center;
 }
 
-.page-container .bar .links a {
+.bar .links a {
 	color: white;
 	text-decoration: none;
 	text-shadow:
@@ -51,16 +56,16 @@ h6 {
 		0 0 0 rgb(0, 0, 255);
 }
 
-.page-container .bar .links .hidden-link {
+.bar .links .hidden-link {
 	opacity: 0;
 	cursor: pointer;
 }
 
-.page-container .bar .links .visible-link {
+.bar .links .visible-link {
 	opacity: 1;
 }
 
-.page-container .bar .links a:hover {
+.bar .links a:hover {
 	text-shadow:
 		0.3px -0.1px 0.1px rgb(255, 0, 0),
 		0.2px 0.1px 0 rgb(0, 255, 0),
@@ -119,4 +124,72 @@ p {
 .click-window .button button img:hover {
 	width: 95%;
 	height: 251px;
+}
+
+/* Right Panel */
+
+.right-panel {
+	width: 60%;
+}
+
+.right-panel .upgrades {
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+
+	padding: 10px 0;
+}
+
+.right-panel .upgrades .upgrade {
+	width: 90%;
+	max-height: 100px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	position: relative;
+
+	background-color: #242424;
+	border-radius: 5px;
+}
+
+.right-panel .upgrades .upgrade:hover {
+	background-color: #363636;
+}
+
+.right-panel .upgrades .upgrade img {
+	max-height: 100px;
+	max-width: 100px;
+}
+
+.right-panel .upgrades .upgrade .upgrade-info h2,
+p {
+	margin-right: 100px;
+	color: white;
+}
+
+.right-panel .upgrades .upgrade button {
+	position: absolute;
+	right: 15px;
+
+	background-color: yellowgreen;
+	padding: 10px 5px;
+	border: 3px solid rgb(90, 90, 90);
+	border-radius: 5px;
+}
+
+.right-panel .upgrades .upgrade button:hover {
+	background-color: rgb(178, 235, 65);
+	border: 3px solid rgb(105, 105, 105);
+}
+
+.right-panel .upgrades .upgrade .disabled {
+	background-color: rgb(154, 177, 106);
+}
+
+.right-panel .upgrades .upgrade .disabled:hover {
+	background-color: rgb(154, 177, 106);
+	border: 3px solid rgb(90, 90, 90);
 }
