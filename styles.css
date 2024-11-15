@@ -74,7 +74,7 @@ h6 {
 	width: 40%;
 	height: 94.5vh;
 	padding-top: 25px;
-	background-image: url('https://www.wallpapertip.com/wmimgs/70-707851_background-wood-wallpaper-hd.jpg');
+	background-image: url('./imgs/background.jpg');
 }
 
 .click-window .stat-panel {

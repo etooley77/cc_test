@@ -67,4 +67,12 @@ function decreaseClicks() {
 	localStorage.setItem('clicks', clicks);
 }
 
-setInterval(decreaseClicks, 1000)
+
+
+// Set Interval
+
+function callAllNecessary() {
+	decreaseClicks();
+}
+
+setInterval(callAllNecessary, 1000)
