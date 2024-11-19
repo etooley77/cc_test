@@ -161,7 +161,9 @@ p {
 
 .right-panel .upgrades .upgrade img {
 	max-height: 100px;
+	min-height: 100px;
 	max-width: 100px;
+	min-width: 100px;
 }
 
 .right-panel .upgrades .upgrade .upgrade-info h2,

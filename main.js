@@ -2,6 +2,10 @@
 var clicksPerClick = 1;
 var clicks = 0;
 
+var autoClicksPerSecond = 0;
+
+var upgradeMultiplier = 0;
+
 // Extra clicks
 
 const extraClickButton = document.getElementById('extra-clicks');
@@ -32,9 +36,14 @@ function loadSessionData() {
 	clicksPerClick = savedClicksPerClick ? parseInt(savedClicksPerClick, 10) : 1;
 	document.getElementById('stat-cpc').innerText = `Clicks per Click: ${clicksPerClick}`;
 
+	// Load autoClicksPerSecond
+	const savedAutoClicksPerSecond = localStorage.getItem('autoClicksPerSecond');
+	autoClicksPerSecond = savedAutoClicksPerSecond ? parseInt(savedAutoClicksPerSecond, 10) : 0;
+	document.getElementById('stat-acps').innerText = `Auto Clicks per Second: ${autoClicksPerSecond}`;
+
 	// Load Upgrades
 	// Cat Upgrades
-	const savedCatUpgradeLevel = localStorage.getItem('catUpgrade');
+	const savedCatUpgradeLevel = localStorage.getItem('catUpgradeLevel');
 	catUpgradeLevel = savedCatUpgradeLevel ? parseInt(savedCatUpgradeLevel, 10) : 0;
 
 	const savedCatUpgradeCost = localStorage.getItem('catUpgradeCost');
@@ -42,8 +51,12 @@ function loadSessionData() {
 	document.getElementById('cat-upgrade').innerHTML = `<span>Cost: ${catUpgradeCost}<br>Purchase</span>`
 
 	// Cat Friend Upgrades
-	const savedCatFriendUpgradeLevel = localStorage.getItem('catFriendUpgrade');
-	catFriendUpgradeLevel = savedCatFriendUpgradeLevel ? parseInt(savedCatFriendUpgradeLevel, 10) : 0;
+	const savedMeatballMolesterUpgradeLevel = localStorage.getItem('MeatballMolesterUpgradeLevel');
+	MeatballMolesterUpgradeLevel = savedMeatballMolesterUpgradeLevel ? parseInt(savedMeatballMolesterUpgradeLevel, 10) : 0;
+
+	const savedMeatballMolesterUpgradeCost = localStorage.getItem('MeatballMolesterUpgradeCost');
+	MeatballMolesterUpgradeCost = savedMeatballMolesterUpgradeCost ? parseInt(savedMeatballMolesterUpgradeCost, 10) : 500;
+	document.getElementById('cat-friend-upgrade').innerHTML = `<span>Cost: ${MeatballMolesterUpgradeCost}<br>Purchase</span`
 }
 
 function saveSessionData() {
@@ -51,10 +64,14 @@ function saveSessionData() {
 	localStorage.setItem('clicks', clicks);
 	localStorage.setItem('clicksPerClick', clicksPerClick);
 
+	localStorage.setItem('autoClicksPerSecond', autoClicksPerSecond)
+
 	// Save upgrades
-	localStorage.setItem('catUpgrade', catUpgradeLevel);
-	localStorage.setItem('catFriendUpgrade', catFriendUpgradeLevel);
+	localStorage.setItem('catUpgradeLevel', catUpgradeLevel);
 	localStorage.setItem('catUpgradeCost', catUpgradeCost);
+
+	localStorage.setItem('MeatballMolesterUpgradeLevel', MeatballMolesterUpgradeLevel);
+	localStorage.setItem('MeatballMolesterUpgradeCost', MeatballMolesterUpgradeCost);
 }
 
 // Function to update click text and save to session data
@@ -81,7 +98,12 @@ function decreaseClicks() {
 	localStorage.setItem('clicks', clicks);
 }
 
-
+function autoClicks() {
+	increaseBy = autoClicksPerSecond;
+	clicks += increaseBy;
+	document.getElementById('stat-clicks').innerText = `Clicks: ${clicks}`;
+	localStorage.setItem('clicks', clicks);
+}
 
 // Upgrade Event Listeners
 
@@ -97,14 +119,20 @@ let catUpgradeCost = 100;  // Change to 'let' to allow updating
 function updateCatUpgrade() {
 	clicks -= catUpgradeCost;
 	catUpgradeLevel += 1;
-	catUpgradeCost = Math.round(catUpgradeCost * 1.11);  // Round cost to nearest integer
+	catUpgradeCost = Math.round(catUpgradeCost * 1.11);
 	catUpgrade.innerHTML = `<span>Cost: ${catUpgradeCost}<br>Purchase</span>`;
 	document.getElementById('stat-clicks').innerText = `Clicks: ${clicks}`;
-	checkUpgradeAvailability();  // Recheck availability after upgrade
+
+	// Add to autoClicksPerSecond
+	autoClicksPerSecond += 5;
+	document.getElementById('stat-acps').innerText = `Auto Clicks per Second: ${autoClicksPerSecond}`
+
+	saveSessionData();
+	checkCatUpgradeAvailability();  // Recheck availability after upgrade
 }
 
 // Function to check if upgrade can be purchased
-function checkUpgradeAvailability() {
+function checkCatUpgradeAvailability() {
 	if (catUpgradeLevel < 10) {
 		if (clicks >= catUpgradeCost) {
 			catUpgrade.classList.remove('disabled');
@@ -120,21 +148,75 @@ function checkUpgradeAvailability() {
 }
 
 // Periodically check availability every 100ms
-setInterval(checkUpgradeAvailability, 100);
+setInterval(checkCatUpgradeAvailability, 100);
 
-// Cat, Cat's Friend Upgrade
+// Meatball Molester Upgrade
 
-const catFriendUpgrade = document.getElementById('cat-friend-upgrade');
-var catFriendUpgradeLevel = 0;
+const MeatballMolesterUpgrade = document.getElementById('cat-friend-upgrade');
+let MeatballMolesterUpgradeLevel = 0;
+let MeatballMolesterUpgradeCost = 500;
 
+function updateMeatballMolesterUpgrade() {
+	clicks -= MeatballMolesterUpgradeCost;
+	MeatballMolesterUpgradeLevel += 1;
+	MeatballMolesterUpgradeCost = Math.round(MeatballMolesterUpgradeCost * 1.11);
+	MeatballMolesterUpgrade.innerHTML = `<span>Cost: ${MeatballMolesterUpgradeCost}<br>Purchase</span>`;
+	document.getElementById('stat-clicks').innerText = `Clicks: ${clicks}`;
 
+	// Add to autoClicksPerSecond
+	autoClicksPerSecond += 15;
+	document.getElementById('stat-acps').innerText = `Auto Clicks per Second: ${autoClicksPerSecond}`;
 
-//
+	saveSessionData();
+	checkMeatballMolesterUpgradeAvailability();
+};
+
+function checkMeatballMolesterUpgradeAvailability() {
+	if (MeatballMolesterUpgradeLevel < 10) {
+		if (clicks >= MeatballMolesterUpgradeCost) {
+			MeatballMolesterUpgrade.classList.remove('disabled');
+			MeatballMolesterUpgrade.addEventListener('click', updateMeatballMolesterUpgrade);
+		} else {
+			MeatballMolesterUpgrade.classList.add('disabled');
+			MeatballMolesterUpgrade.removeEventListener('click', updateMeatballMolesterUpgrade);
+		};
+	} else {
+		MeatballMolesterUpgrade.classList.add('disabled');
+		MeatballMolesterUpgrade.removeEventListener('click', updateMeatballMolesterUpgrade);
+	};
+};
+
+// Check availibility
+setInterval(checkMeatballMolesterUpgradeAvailability, 100);
+
+// Dev Utility Functions
+
+// resetUpgrades() resets the game for development purposes
+function resetUpgrades() {
+	// Resets click count and click bonuses to 0 and 1 respectively
+	localStorage.setItem('clicks', 0);
+	localStorage.setItem('clicksPerClick', 1);
+
+	// Resets all upgrade effects
+	localStorage.setItem('autoClicksPerSecond', 0);
+
+	// Resets all upgrades to original level and cost
+	localStorage.setItem('catUpgradeLevel', 0);
+	localStorage.setItem('catUpgradeCost', 100);
+
+	localStorage.setItem('MeatballMolesterUpgradeLevel', 0);
+	localStorage.setItem('MeatballMolesterUpgradeCost', 500);
+}
 
 // Set Interval
 
 function callAllNecessary() {
+	// resetUpgrades();
+
 	// decreaseClicks();
+	autoClicks();
+
+	saveSessionData();
 }
 
 setInterval(callAllNecessary, 1000)
